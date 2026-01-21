@@ -1,20 +1,21 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import getAllPlayers from "./Services/Api";
 
-function PlayersList() {
-  const URL = "http://localhost:3000/api/players";
+export default function PlayerList() {
+  //State to hold the list of players
   const [players, setPlayers] = useState([]);
-  //Use effect helps with fetching api
+
+  //Function to load players from the API
+  async function loadPlayers() {
+    let data = await getAllPlayers();
+    setPlayers(data);
+  }
+  //Use useEffect to load players when the component mounts
   useEffect(() => {
-    // async await
-    const fetchPlayers = async () => {
-      //fetchs json from api
-      let data = await fetch(URL);
-      const dataResponse = await data.json();
-      setPlayers(dataResponse);
-    };
-    fetchPlayers();
+    loadPlayers();
   }, []);
 
+  //Render the list of players
   return (
     <>
       <>
@@ -32,5 +33,3 @@ function PlayersList() {
     </>
   );
 }
-
-export default PlayersList;
